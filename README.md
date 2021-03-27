@@ -13,7 +13,7 @@ Press any key to kill the Program.
 
 Start Script from Terminal:
 ```shell
-$ python SkribblCheat.py [-ip [INPUT_PATH]]
+$ python SkribblCheat.py -i [INPUT_PATH]
 ```
 
 
