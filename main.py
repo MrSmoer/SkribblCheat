@@ -1,3 +1,4 @@
+import os
 import sys
 from pynput import mouse as ms
 from pynput import keyboard
@@ -29,7 +30,7 @@ def on_click(x, y, button, pressed):
 
 def on_press(key):
     try:
-        sys.exit()
+        os._exit(1)
         print('alphanumeric key {0} pressed'.format(key.char))
         print('adsfadfsa')
     except AttributeError:
@@ -146,14 +147,18 @@ def main():
     brc_available.wait()
 
    # print(sys.argv[1])
-    doc = minidom.parse('/Users/MrSmoer/Desktop/linedraw-master/output/out.svg')  # parseString also exists
+#    doc = minidom.parse('/Users/MrSmoer/Desktop/linedraw-master/output/out.svg')  # parseString also exists
     try:
         if sys.argv[1] == '-ip':
             doc = minidom.parse(sys.argv[2])
+            print('got doc from arg')
+            polylines = [path.getAttribute('points') for path
+                         in doc.getElementsByTagName('polyline')]
+            doc.unlink()
     except IndexError:
         print('Somethings incorrect1')
 
-    polylines = NotImplemented
+ #   polylines = NotImplemented
 
     try:
         doc = minidom.parse('/Users/MrSmoer/Desktop/linedraw-master/output/out.svg')  # parseString also exists
