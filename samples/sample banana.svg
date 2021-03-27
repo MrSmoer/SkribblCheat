@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="50px" height="50px"><polyline points="53.5,28.0,52.5,36.0,53.5,43.5,57.5,51.5" stroke="black" stroke-width="2" fill="none" />
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" 
+preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 1000"><polyline points="53.5,28.0,52.5,36.0,53.5,43.5,57.5,51.5" stroke="black" stroke-width="2" fill="none" />
 <polyline points="58.5,51.0,50.5,52.0" stroke="black" stroke-width="2" fill="none" />
 <polyline points="50.5,55.5,58.5,48.0,67.0,41.0" stroke="black" stroke-width="2" fill="none" />
 <polyline points="67.5,44.0,59.5,45.0,52.0,45.5,44.5,46.5" stroke="black" stroke-width="2" fill="none" />
