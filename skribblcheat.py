@@ -189,6 +189,7 @@ if __name__ == '__main__':
                 lines = 'test'
                 print('imhere')
                 print(filepath)
+                linedraw.sketch(filepath)
                 lines = getlinesfromsvg('linedrawmaster/output/out.svg')
                 # print(lines)
                 print('Conversion done!')
@@ -197,5 +198,5 @@ if __name__ == '__main__':
     except Exception as e:
         print('Somethings incorrect1')
         print(e)
-
+    #print(lines)
     skribblcheat(lines)
