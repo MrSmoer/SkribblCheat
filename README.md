@@ -6,9 +6,11 @@ Internally it uses linedraw from LingDong https://github.com/LingDong-/linedraw 
 <img src="samples/banner banana.png">
 
 ## Usage
-You need the pynput module:
+You need the pynput module, PIL/Pillow, numpy and OpenCV (Optional for better performance):
 ```shell
 $ pip install pynput
+$ pip install pillow
+$ pip install numpy
 ```
 Open your e.g. Paint before you start the Script, select smallest tool (preferably a pen) for best result.
 
