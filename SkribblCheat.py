@@ -30,6 +30,7 @@ def on_click(x, y, button, pressed):
 
 def on_press(key):
     try:
+        mouse.release(Button.left)
         os._exit(1)
         print('alphanumeric key {0} pressed'.format(key.char))
         print('adsfadfsa')
@@ -39,12 +40,12 @@ def on_press(key):
 
 
 def initialize():
-    print("Please select your programm and then click at the two corners of the canvas. Press any key to cancel.")
+    print("Please select your programm and then click at the two corners of the canvas (top left and bottom right). Press any key to cancel.")
     with ms.Listener(
             on_click=on_click) as listener:
         listener.join()
 
-    print('please middleclick, when you are on top left corner of canvas')
+    print('Please select, the top left corner of your canvas by clicking.')
     with ms.Listener(
             on_click=on_click) as listener:
         listener.join()
@@ -52,7 +53,7 @@ def initialize():
     global tlc
     tlc = mouse.position
 
-    print('please middleclick, when you are on bottom left corner of canvas')
+    print('Please select, the bottom right corner of your canvas by clicking.')
     with ms.Listener(
             on_click=on_click) as listener:
         listener.join()
@@ -176,7 +177,8 @@ def skribblcheat():
 
     for i in range(len(polylines)):
         drawPolyline(polylines[i], scalefactor)
-
+    mouse.release(Button.left)
+    print('Done!')
 
 if __name__ == '__main__':
     skribblcheat()
