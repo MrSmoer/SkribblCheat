@@ -8,11 +8,12 @@ You need to import pynput:
 $ pip install pynput
 ```
 Open your e.g. Paint before you start the Script, select smallest tool (preferably a pen) for best result.
-Start script from Terminal: 
 
+Press any key to kill the Program.
+Start Script from Terminal
 ```shell
 $ python SkribblCheat.py [-ip [INPUT_PATH]]
 ```
-Press any key to kill the Program.
+
 
 Click at your Program to focus it and mark the **top left corner** of the area you want the script to draw in and then mark the **bottom right corner**. It will automatically fit your .svg into this area and should start to draw. 
