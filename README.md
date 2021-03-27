@@ -10,7 +10,8 @@ $ pip install pynput
 Open your e.g. Paint before you start the Script, select smallest tool (preferably a pen) for best result.
 
 Press any key to kill the Program.
-Start Script from Terminal
+
+Start Script from Terminal:
 ```shell
 $ python SkribblCheat.py [-ip [INPUT_PATH]]
 ```
