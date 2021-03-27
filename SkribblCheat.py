@@ -137,7 +137,7 @@ def hyphen_split(a):
     # ['id|tag1', 'id|tag2', 'id|tag3', 'id|tag4']
 
 
-def main():
+def skribblcheat():
     listener = keyboard.Listener( #TODO fix sys.exit()
         on_press=on_press)
     listener.start()
@@ -179,4 +179,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    skribblcheat()

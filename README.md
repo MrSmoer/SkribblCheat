@@ -11,5 +11,5 @@ $ pip install pynput
 Convert an image to line drawing and export .SVG format:
 
 ```shell
-$ python main.py [-ip [INPUT_PATH]]
+$ python SkribblCheat.py [-ip [INPUT_PATH]]
 ```
