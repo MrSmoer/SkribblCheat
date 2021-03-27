@@ -7,7 +7,7 @@ import time
 from xml.dom import minidom
 import re
 
-sys.path.append('/Users/anton/Desktop/linedraw-master')
+sys.path.append('/Users/MrSmoer/Desktop/linedraw-master')
 
 mouse = ms.Controller()
 tlc = None
@@ -29,16 +29,16 @@ def on_click(x, y, button, pressed):
 
 def on_press(key):
     try:
-        print('alphanumeric key {0} pressed'.format(
-            key.char))
-        exit()
+        sys.exit()
+        print('alphanumeric key {0} pressed'.format(key.char))
+        print('adsfadfsa')
     except AttributeError:
         print('special key {0} pressed'.format(
             key))
 
 
 def initialize():
-    print("please select your programm and then click at the two corners of the canvas")
+    print("Please select your programm and then click at the two corners of the canvas. Press any key to cancel.")
     with ms.Listener(
             on_click=on_click) as listener:
         listener.join()
@@ -137,7 +137,7 @@ def hyphen_split(a):
 
 
 def main():
-    listener = keyboard.Listener( #TODO dunno
+    listener = keyboard.Listener( #TODO fix sys.exit()
         on_press=on_press)
     listener.start()
 
@@ -145,8 +145,8 @@ def main():
     thread.start()
     brc_available.wait()
 
-    print(sys.argv[1])
-    doc = minidom.parse('/Users/anton/Desktop/linedraw-master/output/out.svg')  # parseString also exists
+   # print(sys.argv[1])
+    doc = minidom.parse('/Users/MrSmoer/Desktop/linedraw-master/output/out.svg')  # parseString also exists
     try:
         if sys.argv[1] == '-ip':
             doc = minidom.parse(sys.argv[2])
@@ -156,9 +156,9 @@ def main():
     polylines = NotImplemented
 
     try:
-        doc = minidom.parse('/Users/anton/Desktop/linedraw-master/output/out.svg')  # parseString also exists
-        # /Users/anton/Desktop/linedraw-master/output/output2.svg
-        #doc = minidom.parse('/Users/anton/Desktop/Test.svg')
+        doc = minidom.parse('/Users/MrSmoer/Desktop/linedraw-master/output/out.svg')  # parseString also exists
+        # /Users/MrSmoer/Desktop/linedraw-master/output/output2.svg
+        #doc = minidom.parse('/Users/MrSmoer/Desktop/Test.svg')
         polylines = [path.getAttribute('points') for path
                      in doc.getElementsByTagName('polyline')]
         doc.unlink()
