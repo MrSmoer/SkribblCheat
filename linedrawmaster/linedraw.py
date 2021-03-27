@@ -4,13 +4,13 @@ import argparse
 
 from PIL import Image, ImageDraw, ImageOps
 
-from filters import *
-from strokesort import *
-import perlin
-from util import *
+from linedrawmaster.filters import *
+from linedrawmaster.strokesort import *
+import linedrawmaster.perlin as perlin
+from linedrawmaster.util import *
 
 no_cv = False
-export_path = "output/out.svg"
+export_path = "linedrawmaster/output/out.svg"
 draw_contours = True
 draw_hatch = True
 show_bitmap = False

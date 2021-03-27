@@ -16,7 +16,7 @@ Press any key to kill the Program.
 
 Start Script from Terminal:
 ```shell
-$ python SkribblCheat.py -i [INPUT_PATH]
+$ python skribblcheat.py -i [INPUT_PATH]
 ```
 
 

@@ -30,4 +30,3 @@ def appmask(IM,masks):
     for x in range(0,w):
         for y in range(0,h):
             PX[x,y] = NPX[x,y]
-
