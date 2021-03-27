@@ -25,6 +25,8 @@ def on_click(x, y, button, pressed):
     if not pressed:
         # Stop listener
         return False
+
+
 def on_press(key):
     try:
         print('alphanumeric key {0} pressed'.format(
@@ -68,28 +70,27 @@ def getDrawabableCanvasSize(polylines):
         points = hyphen_split(polylines[i])  # Splits polylines to individual points
         for c in range(len(points)):  # goes throug all points on polyline
             cord = points[c].split(',')  # splits points in x and y axis
-            if float(cord[0]) > biggestX-5:
-                biggestX = float(cord[0])+5
-            if float(cord[1]) > biggestY-5:
-                biggestY = float(cord[1])+5
+            if float(cord[0]) > (biggestX - 5):
+                biggestX = float(cord[0]) + 5
+            if float(cord[1]) > (biggestY - 5):
+                biggestY = float(cord[1]) + 5
     print('TLC: ', tlc)
     print('bigX: ', biggestX)
     print('bigY: ', biggestY)
 
-
     cnvswidth = tuple(map(lambda i, j: i - j, brc, tlc))[0]
     cnvsheight = tuple(map(lambda i, j: i - j, brc, tlc))[1]
-    cnvsapr = cnvswidth/cnvsheight
+    cnvsapr = cnvswidth / cnvsheight
     print('Canvasaspr: ', cnvsapr)
-    drwblcnvaspr = biggestX/biggestY
-    print('SVG aspr: ', drwblcnvaspr)
+    drwblcnvaspr = biggestX / biggestY
+    print('drwnble aspr: ', drwblcnvaspr)
 
-    if drwblcnvaspr<cnvsapr: #es mus h vertikal saugend
+    if drwblcnvaspr < cnvsapr:  # es mus h vertikal saugend
         print('es mus h vertikal saugend')
         finalheight = cnvsheight
-        finalwidth = finalheight/drwblcnvaspr
+        finalwidth = finalheight * drwblcnvaspr
 
-    else:# es muss horizontal saugend, oder aspect ratio ist eh gleich
+    else:  # es muss horizontal saugend, oder aspect ratio ist eh gleich
         print('es muss horizontal saugend, oder aspect ratio ist eh gleich')
         finalwidth = cnvswidth
     scalefactor = finalwidth / biggestX
@@ -97,10 +98,9 @@ def getDrawabableCanvasSize(polylines):
     return scalefactor
 
 
-
 def drawPolyline(polyline, scalefactor):
     points = hyphen_split(polyline)
-    print(points)
+    #print(points)
     beginpoint = tlc
     for c in range(len(points)):  # goes throug all points on polyline
         beginpoint = formatPoint(points[c], scalefactor)
@@ -109,24 +109,24 @@ def drawPolyline(polyline, scalefactor):
             mouse.position = beginpoint
             time.sleep(0.001)
             mouse.press(Button.left)
-            #time.sleep(0.01)
+            # time.sleep(0.01)
             mouse.position = destpoint
-            #time.sleep(0.01)
+            # time.sleep(0.01)
             mouse.release(Button.left)
         else:
             destpoint = tlc
-            print("finished line")
+            #print("finished line")
     mouse.release(Button.left)
 
 
 def formatPoint(p, scale):
     strcord = p.split(',')
-    print(scale)
-    print(tlc)
-    x = float(strcord[0])*scale + tlc[0] #+ drwblCnvsX/2
-    y = float(strcord[1])*scale + tlc[1] #+ drwblCnvsY/2
-    print('x: ',x)
-    print('y: ',y)
+    #print(scale)
+    #print(tlc)
+    x = float(strcord[0]) * scale + tlc[0]  # + drwblCnvsX/2
+    y = float(strcord[1]) * scale + tlc[1]  # + drwblCnvsY/2
+    #print('x: ', x)
+    #print('y: ', y)
     thistuple = (int(x), int(y))
     return thistuple
 
@@ -137,30 +137,30 @@ def hyphen_split(a):
 
 
 def main():
-    listener = keyboard.Listener(
+    listener = keyboard.Listener( #TODO dunno
         on_press=on_press)
     listener.start()
 
-    thread = threading.Thread(target=initialize())
+    thread = threading.Thread(target=initialize()) #waits for initializing function (two dots)
     thread.start()
-
     brc_available.wait()
+
     print(sys.argv[1])
     doc = minidom.parse('/Users/anton/Desktop/linedraw-master/output/out.svg')  # parseString also exists
     try:
-        if sys.argv[1]=='-ip':
+        if sys.argv[1] == '-ip':
             doc = minidom.parse(sys.argv[2])
     except IndexError:
         print('Somethings incorrect1')
 
-    polylines=NotImplemented
+    polylines = NotImplemented
 
     try:
         doc = minidom.parse('/Users/anton/Desktop/linedraw-master/output/out.svg')  # parseString also exists
-        # /Usexrs/anton/Desktop/linedraw-master/output/output2.svg
+        # /Users/anton/Desktop/linedraw-master/output/output2.svg
         #doc = minidom.parse('/Users/anton/Desktop/Test.svg')
         polylines = [path.getAttribute('points') for path
-                 in doc.getElementsByTagName('polyline')]
+                     in doc.getElementsByTagName('polyline')]
         doc.unlink()
     except:
         print('Somethings incorrect3')
