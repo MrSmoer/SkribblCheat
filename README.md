@@ -6,5 +6,5 @@ It only works with files that are exclusively made from Polylines. Intendet to b
 Convert an image to line drawing and export .SVG format:
 
 ```shell
-$ python linedraw.py -i input.jpg -o output.svg
+$ python main.py -ip <svg-path>
 ```
