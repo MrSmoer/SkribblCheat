@@ -150,7 +150,7 @@ def skribblcheat():
    # print(sys.argv[1])
 #    doc = minidom.parse('/Users/MrSmoer/Desktop/linedraw-master/output/out.svg')  # parseString also exists
     try:
-        if sys.argv[1] == '-ip':
+        if sys.argv[1] == '-i':
             doc = minidom.parse(sys.argv[2])
             print('got doc from arg')
             polylines = [path.getAttribute('points') for path
