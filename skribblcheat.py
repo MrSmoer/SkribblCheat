@@ -70,6 +70,7 @@ def initialize():
 
 
 def getDrawabableCanvasSize(polylines):
+    print('Scaling...')
     global biggestX
     global biggestY
 
@@ -81,27 +82,27 @@ def getDrawabableCanvasSize(polylines):
                 biggestX = float(cord[0]) + 5
             if float(cord[1]) > (biggestY - 5):
                 biggestY = float(cord[1]) + 5
-    print('TLC: ', tlc)
-    print('bigX: ', biggestX)
-    print('bigY: ', biggestY)
+    #print('TLC: ', tlc)
+    #print('bigX: ', biggestX)
+    #print('bigY: ', biggestY)
 
     cnvswidth = tuple(map(lambda i, j: i - j, brc, tlc))[0]
     cnvsheight = tuple(map(lambda i, j: i - j, brc, tlc))[1]
     cnvsapr = cnvswidth / cnvsheight
-    print('Canvasaspr: ', cnvsapr)
+    #print('Canvasaspr: ', cnvsapr)
     drwblcnvaspr = biggestX / biggestY
-    print('drwnble aspr: ', drwblcnvaspr)
+    #print('drwnble aspr: ', drwblcnvaspr)
 
     if drwblcnvaspr < cnvsapr:  # es mus h vertikal saugend
-        print('es mus h vertikal saugend')
+        #print('es mus h vertikal saugend')
         finalheight = cnvsheight
         finalwidth = finalheight * drwblcnvaspr
 
     else:  # es muss horizontal saugend, oder aspect ratio ist eh gleich
-        print('es muss horizontal saugend, oder aspect ratio ist eh gleich')
+        #print('es muss horizontal saugend, oder aspect ratio ist eh gleich')
         finalwidth = cnvswidth
     scalefactor = finalwidth / biggestX
-    print(scalefactor)
+    #print(scalefactor)
     return scalefactor
 
 
@@ -154,6 +155,7 @@ def skribblcheat(polylines):
 
     scalefactor = getDrawabableCanvasSize(polylines)
 
+    print('Drawing...')
     for i in range(len(polylines)):
         drawPolyline(polylines[i], scalefactor)
     mouse.release(Button.left)
