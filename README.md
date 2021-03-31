@@ -22,4 +22,4 @@ $ python skribblcheat.py -i [INPUT_PATH]
 ```
 
 
-Click at your Program to focus it and mark the **top left corner** of the area you want the script to draw in and then mark the **bottom right corner**. It will automatically fit your .svg into this area and should start to draw. 
+Click at your Program to focus it and mark the **top left corner** of the area you want the script to draw in and then mark the **bottom right corner**. It will automatically fit your picture into this area and should start to draw. 
