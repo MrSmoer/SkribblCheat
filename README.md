@@ -1,6 +1,6 @@
 
 # SkribblCheat
-A python3 script that can convert(draw) .svg polyline drawings to mouse movement for drawing online Games like Skribbl.io or Garticphone.com
+A python3 script that can convert (draw) .svg polyline drawings to mouse movement for drawing online Games like Skribbl.io or Garticphone.com
 Internally it uses linedraw from LingDong https://github.com/LingDong-/linedraw which is able to convert common image formats into polyline .svg-files that can be drawn.
 
 <img src="samples/banner banana.png">
