@@ -1,3 +1,4 @@
+# !python3
 import os
 import re
 import sys
@@ -82,27 +83,27 @@ def getDrawabableCanvasSize(polylines):
                 biggestX = float(cord[0]) + 5
             if float(cord[1]) > (biggestY - 5):
                 biggestY = float(cord[1]) + 5
-    #print('TLC: ', tlc)
-    #print('bigX: ', biggestX)
-    #print('bigY: ', biggestY)
+    # print('TLC: ', tlc)
+    # print('bigX: ', biggestX)
+    # print('bigY: ', biggestY)
 
     cnvswidth = tuple(map(lambda i, j: i - j, brc, tlc))[0]
     cnvsheight = tuple(map(lambda i, j: i - j, brc, tlc))[1]
     cnvsapr = cnvswidth / cnvsheight
-    #print('Canvasaspr: ', cnvsapr)
+    # print('Canvasaspr: ', cnvsapr)
     drwblcnvaspr = biggestX / biggestY
-    #print('drwnble aspr: ', drwblcnvaspr)
+    # print('drwnble aspr: ', drwblcnvaspr)
 
     if drwblcnvaspr < cnvsapr:  # es mus h vertikal saugend
-        #print('es mus h vertikal saugend')
+        # print('es mus h vertikal saugend')
         finalheight = cnvsheight
         finalwidth = finalheight * drwblcnvaspr
 
     else:  # es muss horizontal saugend, oder aspect ratio ist eh gleich
-        #print('es muss horizontal saugend, oder aspect ratio ist eh gleich')
+        # print('es muss horizontal saugend, oder aspect ratio ist eh gleich')
         finalwidth = cnvswidth
     scalefactor = finalwidth / biggestX
-    #print(scalefactor)
+    # print(scalefactor)
     return scalefactor
 
 
@@ -158,8 +159,19 @@ def skribblcheat(polylines):
     print('Drawing...')
     for i in range(len(polylines)):
         drawPolyline(polylines[i], scalefactor)
+        #print(i/len(polylines)*100)
+        n=len(polylines)
+        j = (i + 1) / n
+        sys.stdout.write('\r')
+        # the exact output you're looking for:
+        sys.stdout.write("[%-20s] %d%%" % ('='*int(20*j), 100*j))
+        sys.stdout.flush()
+
     mouse.release(Button.left)
-    print('Done!')
+    sys.stdout.write('\r')
+    # the exact output you're looking for:
+    sys.stdout.write("Done!                                                  ")
+    sys.stdout.flush()
 
 
 def getlinesfromsvg(loclpath):
@@ -200,5 +212,8 @@ if __name__ == '__main__':
     except Exception as e:
         print('Somethings incorrect1')
         print(e)
-    #print(lines)
+    # print(lines)
     skribblcheat(lines)
+
+# google url                     |query | image
+# https://www.google.com/search?q=banane&tbm=isch
