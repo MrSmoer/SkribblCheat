@@ -110,18 +110,20 @@ def getDrawabableCanvasSize(polylines):
 def drawPolyline(polyline, scalefactor):
     points = hyphen_split(polyline)
     # print(points)
-    beginpoint = tlc
+    beginpoint = formatPoint(points[0], scalefactor)
+    mouse.position = beginpoint
+    mouse.press(Button.left)
     for c in range(len(points)):  # goes throug all points on polyline
         beginpoint = formatPoint(points[c], scalefactor)
         if len(points) > c + 1:
             destpoint = formatPoint(points[c + 1], scalefactor)
             mouse.position = beginpoint
             time.sleep(0.001)
-            mouse.press(Button.left)
+            #mouse.press(Button.left)
             # time.sleep(0.01)
             mouse.position = destpoint
             # time.sleep(0.01)
-            mouse.release(Button.left)
+            #mouse.release(Button.left)
         else:
             destpoint = tlc
             # print("finished line")
