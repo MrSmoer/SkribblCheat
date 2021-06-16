@@ -118,7 +118,7 @@ def drawPolyline(polyline, scalefactor):
         if len(points) > c + 1:
             destpoint = formatPoint(points[c + 1], scalefactor)
             mouse.position = beginpoint
-            time.sleep(0.001)
+            time.sleep(0.0001)
             #mouse.press(Button.left)
             # time.sleep(0.01)
             mouse.position = destpoint
