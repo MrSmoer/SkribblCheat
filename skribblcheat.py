@@ -11,6 +11,8 @@ from pynput import keyboard
 from pynput import mouse as ms
 from pynput.mouse import Button
 
+from argparse import ArgumentParser
+
 from linedrawmaster import linedraw
 import linedrawmaster.filters
 
@@ -26,6 +28,12 @@ biggestX = 0
 
 drwblCnvsX = 0
 drwblCnvsY = 0
+
+# ARGS
+parser = ArgumentParser()
+parser.add_argument('-p', '--path', dest='imagepath', help='Path of the Image to draw', default=None)
+
+args = parser.parse_args()
 
 
 def on_click(x, y, button, pressed):
@@ -47,7 +55,8 @@ def on_press(key):
 
 def initialize():
     print(
-        "Please select your programm and then click at the two corners of the canvas (top left and bottom right). Press any key to cancel.")
+        "Please select your programm and then click at the two corners of the canvas (top left and bottom right). "
+        "Press any key to cancel.")
     with ms.Listener(
             on_click=on_click) as listener:
         listener.join()
@@ -71,8 +80,7 @@ def initialize():
     brc_available.set()
 
 
-def getDrawabableCanvasSize(polylines):
-    print('Scaling...')
+def calc_scalefactor(polylines):
     global biggestX
     global biggestY
 
@@ -108,30 +116,25 @@ def getDrawabableCanvasSize(polylines):
     return scalefactor
 
 
-def drawLine(line):
-    #print(line)
+def draw_line(points):
+    # print(line)
     # print(points)
-    beginpoint = line[0]
+    beginpoint = points[0]
     mouse.position = beginpoint
     mouse.press(Button.left)
-    for c in range(len(line)):  # goes throug all points on polyline
-        beginpoint = line[c]
-        if len(line) > c + 1:
-            destpoint = line[c + 1]
+    for c in range(len(points)):  # goes throug all points on polyline
+        beginpoint = points[c]
+        if len(points) > c + 1:
+            destpoint = points[c + 1]
             mouse.position = beginpoint
             time.sleep(0.0001)
-            #mouse.press(Button.left)
-            # time.sleep(0.01)
             mouse.position = destpoint
-            # time.sleep(0.01)
-            #mouse.release(Button.left)
-        else:
-            destpoint = tlc
+        # else:
             # print("finished line")
     mouse.release(Button.left)
 
 
-def formatPoint(p, scale):
+def format_point(p, scale):
     strcord = p.split(',')
     # print(scale)
     # print(tlc)
@@ -139,8 +142,8 @@ def formatPoint(p, scale):
     y = float(strcord[1]) * scale + tlc[1]  # + drwblCnvsY/2
     # print('x: ', x)
     # print('y: ', y)
-    thistuple = (int(x), int(y))
-    return thistuple
+    this_tuple = (int(x), int(y))
+    return this_tuple
 
 
 def hyphen_split(a):
@@ -148,20 +151,70 @@ def hyphen_split(a):
     # ['id|tag1', 'id|tag2', 'id|tag3', 'id|tag4']
 
 
-def convertLines(polylines, scalefactor):
-    convertedLines = []
+def convert_lines(polylines, scalefactor):
+    converted_lines = []
     for i in range(len(polylines)):
         line = polylines[i]
         points = hyphen_split(line)
-        convertedLine =[]
+        converted_line = []
         for c in range(len(points)):
-            convertedPoint = formatPoint(points[c], scalefactor)
-            convertedLine.append(convertedPoint)
-        convertedLines.append(convertedLine)
-    return convertedLines
+            converted_point = format_point(points[c], scalefactor)
+            converted_line.append(converted_point)
+        converted_lines.append(converted_line)
+    return converted_lines
 
 
-def skribblcheat(polylines):
+def scale_and_convert(polylines):
+    scalefactor = calc_scalefactor(polylines)
+    converted_lines = convert_lines(polylines, scalefactor)
+    return converted_lines
+
+def get_lines_from_svg(loclpath):
+    doc = minidom.parse(loclpath)  # parseString also exists
+    lcllines = [path.getAttribute('points') for path
+                in doc.getElementsByTagName('polyline')]
+    doc.unlink()
+    return lcllines
+
+
+def check_is_svg(filepath):
+    try:
+        svg_r = r'(?:<\?xml\b[^>]*>[^<]*)?(?:<!--.*?-->[^<]*)*(?:<svg|<!DOCTYPE svg)\b'
+        svg_re = re.compile(svg_r, re.DOTALL)
+
+        with open(filepath, 'r') as f:
+            is_svg = False
+            file_contents = f.read()  # .decode('latin_1')  # avoid any conversion exception
+            is_svg = svg_re.match(file_contents) is not None
+            print(is_svg)
+    except Exception as e:
+        print(e)
+    return is_svg
+
+
+def get_lines_from_file():
+    if args.imagepath is not None:
+        global lines
+        filepath = args.imagepath
+        is_svg = check_is_svg(filepath)
+        if is_svg:
+            lines = get_lines_from_svg(filepath)
+        else:
+            lines = None
+            print('imhere')
+            print(filepath)
+            linedraw.sketch(filepath)
+            lines = get_lines_from_svg('linedrawmaster/output/out.svg')
+            # print(lines)
+            print('Conversion done!')
+    else:
+        print('You should specify an image with "-p [imagepath]"')
+    return lines
+
+
+if __name__ == '__main__':
+    lines = get_lines_from_file()
+
     listener = keyboard.Listener(
         on_press=on_press)
     listener.start()
@@ -170,21 +223,19 @@ def skribblcheat(polylines):
     thread.start()
     brc_available.wait()
 
-    scalefactor = getDrawabableCanvasSize(polylines)
+    print('Scaling...')
+    converted_lines = scale_and_convert(lines)
 
     print('Drawing...')
-
-    convertedLines = convertLines(polylines, scalefactor)
-
-    for c in range(len(polylines)):
-        drawLine(convertedLines[c])
-        #print(i/len(polylines)*100)
+    for c in range(len(lines)):
+        draw_line(converted_lines[c])
+        # print(i/len(polylines)*100)
         # Progress bar
-        n=len(polylines)
+        n = len(lines)
         j = (c + 1) / n
         sys.stdout.write('\r')
         # the exact output you're looking for:
-        sys.stdout.write("[%-20s] %d%%" % ('='*int(20*j), 100*j))
+        sys.stdout.write("[%-20s] %d%%" % ('=' * int(20 * j), 100 * j))
         sys.stdout.flush()
 
     mouse.release(Button.left)
@@ -192,48 +243,6 @@ def skribblcheat(polylines):
     # the exact output you're looking for:
     sys.stdout.write("Done!                                                  ")
     sys.stdout.flush()
-
-
-def getlinesfromsvg(loclpath):
-    doc = minidom.parse(loclpath)  # parseString also exists
-    lcllines = [path.getAttribute('points') for path
-                in doc.getElementsByTagName('polyline')]
-    doc.unlink()
-    return lcllines
-
-
-if __name__ == '__main__':
-    try:
-        if sys.argv[1] == '-i':
-            try:
-                filepath = sys.argv[2]
-                print(filepath)
-                SVG_R = r'(?:<\?xml\b[^>]*>[^<]*)?(?:<!--.*?-->[^<]*)*(?:<svg|<!DOCTYPE svg)\b'
-                SVG_RE = re.compile(SVG_R, re.DOTALL)
-
-                with open(filepath, 'r') as f:
-                    is_svg = False
-                    file_contents = f.read()  # .decode('latin_1')  # avoid any conversion exception
-                    is_svg = SVG_RE.match(file_contents) is not None
-                    print(is_svg)
-            except Exception as e:
-                print(e)
-
-            if not is_svg:
-                lines = 'test'
-                print('imhere')
-                print(filepath)
-                linedraw.sketch(filepath)
-                lines = getlinesfromsvg('linedrawmaster/output/out.svg')
-                # print(lines)
-                print('Conversion done!')
-            else:
-                lines = getlinesfromsvg(filepath)
-    except Exception as e:
-        print('Somethings incorrect1')
-        print(e)
-    # print(lines)
-    skribblcheat(lines)
 
 # google url                     |query | image
 # https://www.google.com/search?q=banane&tbm=isch
