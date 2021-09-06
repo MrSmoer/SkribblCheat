@@ -4,6 +4,7 @@ import re
 import sys
 import threading
 import time
+from typing import Type
 from xml.dom import minidom
 
 from pynput import keyboard
@@ -107,16 +108,16 @@ def getDrawabableCanvasSize(polylines):
     return scalefactor
 
 
-def drawPolyline(polyline, scalefactor):
-    points = hyphen_split(polyline)
+def drawLine(line):
+    #print(line)
     # print(points)
-    beginpoint = formatPoint(points[0], scalefactor)
+    beginpoint = line[0]
     mouse.position = beginpoint
     mouse.press(Button.left)
-    for c in range(len(points)):  # goes throug all points on polyline
-        beginpoint = formatPoint(points[c], scalefactor)
-        if len(points) > c + 1:
-            destpoint = formatPoint(points[c + 1], scalefactor)
+    for c in range(len(line)):  # goes throug all points on polyline
+        beginpoint = line[c]
+        if len(line) > c + 1:
+            destpoint = line[c + 1]
             mouse.position = beginpoint
             time.sleep(0.0001)
             #mouse.press(Button.left)
@@ -147,6 +148,19 @@ def hyphen_split(a):
     # ['id|tag1', 'id|tag2', 'id|tag3', 'id|tag4']
 
 
+def convertLines(polylines, scalefactor):
+    convertedLines = []
+    for i in range(len(polylines)):
+        line = polylines[i]
+        points = hyphen_split(line)
+        convertedLine =[]
+        for c in range(len(points)):
+            convertedPoint = formatPoint(points[c], scalefactor)
+            convertedLine.append(convertedPoint)
+        convertedLines.append(convertedLine)
+    return convertedLines
+
+
 def skribblcheat(polylines):
     listener = keyboard.Listener(
         on_press=on_press)
@@ -159,11 +173,15 @@ def skribblcheat(polylines):
     scalefactor = getDrawabableCanvasSize(polylines)
 
     print('Drawing...')
-    for i in range(len(polylines)):
-        drawPolyline(polylines[i], scalefactor)
+
+    convertedLines = convertLines(polylines, scalefactor)
+
+    for c in range(len(polylines)):
+        drawLine(convertedLines[c])
         #print(i/len(polylines)*100)
+        # Progress bar
         n=len(polylines)
-        j = (i + 1) / n
+        j = (c + 1) / n
         sys.stdout.write('\r')
         # the exact output you're looking for:
         sys.stdout.write("[%-20s] %d%%" % ('='*int(20*j), 100*j))
